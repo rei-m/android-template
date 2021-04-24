@@ -1,7 +1,7 @@
 package me.reim.androidtemplate
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import me.reim.androidtemplate.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
