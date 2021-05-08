@@ -31,6 +31,4 @@ android {
 
 dependencies {
     implementation libraries
-
-    testImplementation 'junit:junit:4.+'
 }

@@ -15,15 +15,16 @@ package me.reim.androidtemplate.infrastructure.di
 
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import javax.inject.Singleton
 
 @Module
-open class NetworkModule {
-    @Singleton
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
     @Provides
     fun provideOkHttpClient(loggingInterceptors: Set<@JvmSuppressWildcards Interceptor>): OkHttpClient =
         OkHttpClient.Builder().apply {

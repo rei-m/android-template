@@ -11,13 +11,11 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.reim.androidtemplate.infrastructure
+package me.reim.androidtemplate
 
-import me.reim.androidtemplate.domain.QiitaArticle
-import retrofit2.http.GET
-import retrofit2.http.Query
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
-interface QiitaApiService {
-    @GET("items")
-    suspend fun getItems(@Query("query") query: String): List<QiitaArticle>
+@HiltAndroidApp
+class App : Application() {
 }

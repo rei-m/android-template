@@ -36,10 +36,6 @@ android {
             // your project's release build type.
             minifyEnabled true
 
-            // Enables resource shrinking, which is performed by the
-            // Android Gradle plugin.
-            shrinkResources true
-
             // Includes the default ProGuard rules files that are packaged with
             // the Android Gradle plugin. To learn more, go to the section about
             // R8 configuration files.
@@ -59,18 +55,18 @@ dependencies {
     implementation project(":domain")
 
     implementation libraries
-    implementation dagger_liblary
-    kapt dagger_compiler
+    implementation hilt_liblary
+    kapt hilt_compiler
 
-    implementation network_libraries
+    api network_libraries
 
     // For instrumentation tests
-    androidTestImplementation dagger_testing_liblary
-    kaptAndroidTest dagger_compiler
+    androidTestImplementation hilt_testing_liblary
+    kaptAndroidTest hilt_compiler
 
     // For local unit tests
-    testImplementation dagger_testing_liblary
-    kaptTest dagger_compiler
+    testImplementation hilt_testing_liblary
+    kaptTest hilt_compiler
 }
 
 kapt {

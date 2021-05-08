@@ -17,22 +17,17 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.Dispatchers
+import me.reim.androidtemplate.domain.QiitaArticleRepository
 import me.reim.androidtemplate.infrastructure.network.QiitaApiService
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import me.reim.androidtemplate.infrastructure.repository.QiitaArticleRepositoryImpl
 
 @Module
 @InstallIn(SingletonComponent::class)
-object QiitaApiModule {
+object RepositoryModule {
     @Provides
-    fun provideQiitaApiService(okHttpClient: OkHttpClient): QiitaApiService {
-        val retrofit = Retrofit.Builder()
-            .client(okHttpClient)
-            .baseUrl("https://qiita.com/api/v2/")
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-
-        return retrofit.create(QiitaApiService::class.java)
-    }
+    fun provideQiitaArticleRepository(qiitaApiService: QiitaApiService): QiitaArticleRepository = QiitaArticleRepositoryImpl(
+        Dispatchers.Default,
+        qiitaApiService
+    )
 }
