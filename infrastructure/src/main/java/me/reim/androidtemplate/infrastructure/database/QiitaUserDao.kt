@@ -11,9 +11,20 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.reim.androidtemplate.domain
+package me.reim.androidtemplate.infrastructure.database
 
-data class QiitaUser(
-    val id: String,
-    val name: String
-)
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
+import me.reim.androidtemplate.infrastructure.database.entity.QiitaUserEntity
+
+@Dao
+interface QiitaUserDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(vararg qiitaUsers: QiitaUserEntity)
+
+    @Query("SELECT * FROM qiita_users")
+    fun getAll(): Flow<List<QiitaUserEntity>>
+}

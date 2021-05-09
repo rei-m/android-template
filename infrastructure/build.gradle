@@ -55,6 +55,10 @@ dependencies {
     implementation project(":domain")
 
     implementation libraries
+
+    api room_libraries
+    kapt room_compiler
+
     implementation hilt_liblary
     kapt hilt_compiler
 

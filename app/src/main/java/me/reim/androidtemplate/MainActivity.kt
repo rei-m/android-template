@@ -2,6 +2,7 @@ package me.reim.androidtemplate
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.asLiveData
 import dagger.hilt.android.AndroidEntryPoint
 import me.reim.androidtemplate.domain.QiitaArticleRepository
 import me.reim.androidtemplate.ui.main.MainFragment
@@ -20,6 +21,10 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragment.newInstance())
                 .commitNow()
+        }
+
+        qiitaArticleRepository.articles.asLiveData().observe(this) {
+
         }
     }
 }

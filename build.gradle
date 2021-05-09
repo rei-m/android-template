@@ -12,6 +12,7 @@ buildscript {
         def okhttp_version = '4.9.0'
         def retrofit_version = '2.9.0'
         def moshi_version = '1.12.0'
+        def room_version = "2.3.0"
 
         libraries = [
                 // Kotlin standard library
@@ -35,6 +36,14 @@ buildscript {
                 "com.squareup.moshi:moshi:$moshi_version",
                 "com.squareup.moshi:moshi-kotlin:$moshi_version",
         ]
+
+        room_libraries = [
+                "androidx.room:room-runtime:$room_version",
+                "androidx.room:room-ktx:$room_version",
+        ]
+
+        room_compiler = "androidx.room:room-compiler:$room_version"
+        room_testing_liblary = "androidx.room:room-testing:$room_version"
     }
 
     repositories {

@@ -11,9 +11,17 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.reim.androidtemplate.domain
+package me.reim.androidtemplate.infrastructure.database
 
-data class QiitaUser(
-    val id: String,
-    val name: String
-)
+import androidx.room.Database
+import androidx.room.RoomDatabase
+import me.reim.androidtemplate.infrastructure.database.entity.QiitaUserEntity
+
+@Database(entities = [QiitaUserEntity::class], version = 1, exportSchema = false)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun qiitaUserDao(): QiitaUserDao
+
+    companion object {
+        const val DATABASE_NAME = "android-template-db"
+    }
+}

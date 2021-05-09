@@ -11,9 +11,14 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.reim.androidtemplate.domain
+package me.reim.androidtemplate.infrastructure.database.entity
 
-data class QiitaUser(
-    val id: String,
-    val name: String
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "qiita_users")
+data class QiitaUserEntity(
+    @PrimaryKey(autoGenerate = false) val id: String,
+    @ColumnInfo(name = "name") val name: String
 )
