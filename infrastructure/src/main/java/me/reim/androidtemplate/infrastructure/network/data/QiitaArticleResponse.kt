@@ -11,20 +11,14 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.reim.androidtemplate.infrastructure.database
+package me.reim.androidtemplate.infrastructure.network.data
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import kotlinx.coroutines.flow.Flow
-import me.reim.androidtemplate.infrastructure.database.entity.QiitaUserEntity
+import com.squareup.moshi.JsonClass
 
-@Dao
-interface QiitaUserDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(vararg qiitaUsers: QiitaUserEntity)
-
-    @Query("SELECT * FROM qiita_users")
-    fun getAll(): Flow<List<QiitaUserEntity>>
-}
+@JsonClass(generateAdapter = true)
+data class QiitaArticleResponse(
+    val id: String,
+    val title: String,
+    val body: String,
+    val user: QiitaArticleUserResponse,
+)

@@ -15,11 +15,18 @@ package me.reim.androidtemplate.infrastructure.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import me.reim.androidtemplate.infrastructure.database.entity.QiitaUserEntity
+import me.reim.androidtemplate.infrastructure.database.data.QiitaArticleData
+import me.reim.androidtemplate.infrastructure.database.data.QiitaArticleRemoteKey
+import me.reim.androidtemplate.infrastructure.database.data.QiitaUserData
 
-@Database(entities = [QiitaUserEntity::class], version = 1, exportSchema = false)
+@Database(
+    entities = [QiitaUserData::class, QiitaArticleData::class, QiitaArticleRemoteKey::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun qiitaUserDao(): QiitaUserDao
+    abstract fun qiitaArticleAndUserDao(): QiitaArticleAndUserDao
+    abstract fun qiitaArticleRemoteKeyDao(): QiitaArticleRemoteKeyDao
 
     companion object {
         const val DATABASE_NAME = "android-template-db"

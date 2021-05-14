@@ -62,7 +62,11 @@ dependencies {
     implementation hilt_liblary
     kapt hilt_compiler
 
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.12.0"
+
     api network_libraries
+
+    api paging_library
 
     // For instrumentation tests
     androidTestImplementation hilt_testing_liblary

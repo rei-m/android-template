@@ -13,11 +13,12 @@
 
 package me.reim.androidtemplate.infrastructure.network
 
-import me.reim.androidtemplate.domain.QiitaArticle
+import me.reim.androidtemplate.infrastructure.network.data.QiitaArticleResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface QiitaApiService {
-    @GET("items")
-    suspend fun getItems(@Query("query") query: String): List<QiitaArticle>
+    @GET("users/{id}/items")
+    suspend fun getItems(@Path("id") id: String, @Query("page") page: Int): List<QiitaArticleResponse>
 }

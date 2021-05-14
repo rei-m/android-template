@@ -13,10 +13,13 @@
 
 package me.reim.androidtemplate.domain
 
+import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 
 interface QiitaArticleRepository {
     val articles: Flow<List<QiitaArticle>>
 
     suspend fun tryUpdateRecentArticlesCache()
+
+    fun getArticleStream(qiitaUserId: QiitaUserId): Flow<PagingData<QiitaArticle>>
 }

@@ -31,4 +31,5 @@ android {
 
 dependencies {
     implementation libraries
+    implementation paging_library
 }

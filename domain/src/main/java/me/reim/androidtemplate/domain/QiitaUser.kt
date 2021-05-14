@@ -14,6 +14,7 @@
 package me.reim.androidtemplate.domain
 
 data class QiitaUser(
-    val id: String,
-    val name: String
-)
+    override val id: QiitaUserId,
+    val name: String,
+    val profileImageUrl: String,
+) : AbstractEntity<QiitaUserId>(id)

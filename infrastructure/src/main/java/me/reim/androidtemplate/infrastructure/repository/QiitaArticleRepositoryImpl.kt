@@ -13,25 +13,94 @@
 
 package me.reim.androidtemplate.infrastructure.repository
 
+import androidx.paging.*
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.*
-import me.reim.androidtemplate.domain.QiitaArticle
-import me.reim.androidtemplate.domain.QiitaArticleRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import me.reim.androidtemplate.domain.*
+import me.reim.androidtemplate.infrastructure.data.QiitaArticleMediator
+import me.reim.androidtemplate.infrastructure.database.AppDatabase
+import me.reim.androidtemplate.infrastructure.database.data.QiitaArticleData
+import me.reim.androidtemplate.infrastructure.database.data.QiitaUserData
 import me.reim.androidtemplate.infrastructure.network.QiitaApiService
-import javax.inject.Inject
 
-class QiitaArticleRepositoryImpl @Inject constructor(
+class QiitaArticleRepositoryImpl(
     private val defaultDispatcher: CoroutineDispatcher,
-    private val qiitaApiService: QiitaApiService
+    private val qiitaApiService: QiitaApiService,
+    private val appDatabase: AppDatabase,
 ) : QiitaArticleRepository {
-    override val articles: Flow<List<QiitaArticle>> = flow<List<QiitaArticle>> {
-        println("emit articles !!")
-        emit(listOf())
+    override val articles: Flow<List<QiitaArticle>> = appDatabase.qiitaArticleAndUserDao().getAll().map { list ->
+        list.map { qiitaArticleAndUserData ->
+            val (qiitaArticleData, qiitaUserData) = qiitaArticleAndUserData
+            QiitaArticle(
+                id = QiitaArticleId((qiitaArticleData.id)),
+                title = qiitaArticleData.title,
+                body = qiitaArticleData.body,
+                user = QiitaUser(
+                    id = QiitaUserId(qiitaUserData.id),
+                    name = qiitaUserData.name,
+                    profileImageUrl = qiitaUserData.profileImageUrl
+                )
+            )
+        }
     }.flowOn(defaultDispatcher).conflate()
 
     override suspend fun tryUpdateRecentArticlesCache() {
+        val qiitaArticleDataList = mutableListOf<QiitaArticleData>()
+        val qiitaUserDataSet = mutableSetOf<QiitaUserData>()
+        qiitaApiService.getItems("rei-m", 1).forEach {
+            val qiitaUserData = QiitaUserData(
+                id = it.user.id,
+                name = it.user.name,
+                profileImageUrl = it.user.profileImageUrl
+            )
+            qiitaUserDataSet.add(qiitaUserData)
+            qiitaArticleDataList.add(
+                QiitaArticleData(
+                    id = it.id,
+                    title = it.title,
+                    body = it.body,
+                    qiitaUserOwnerId = qiitaUserData.id
+                )
+            )
+        }
 
+        appDatabase.qiitaArticleAndUserDao().insertAllArticleAndUser(qiitaUserDataSet.toMutableList(), qiitaArticleDataList)
     }
 
+    override fun getArticleStream(qiitaUserId: QiitaUserId): Flow<PagingData<QiitaArticle>> {
+        val pagingSourceFactory = {
+            appDatabase.qiitaArticleAndUserDao().articleByQiitaUserId(qiitaUserId.value)
+        }
 
+        @OptIn(ExperimentalPagingApi::class)
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false
+            ),
+            remoteMediator = QiitaArticleMediator(
+                qiitaUserId.value,
+                qiitaApiService,
+                appDatabase
+            ),
+            pagingSourceFactory = pagingSourceFactory
+        ).flow.map { source ->
+            source.map {
+                val (qiitaArticleData, qiitaUserData) = it
+                QiitaArticle(
+                    id = QiitaArticleId(qiitaArticleData.id),
+                    title = qiitaArticleData.title,
+                    body = qiitaArticleData.body,
+                    user = QiitaUser(
+                        id = QiitaUserId(qiitaUserData.id),
+                        name = qiitaUserData.name,
+                        profileImageUrl = qiitaUserData.profileImageUrl
+                    )
+                )
+            }
+        }
+    }
 }
