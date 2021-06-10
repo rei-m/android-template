@@ -14,7 +14,33 @@
 package me.reim.androidtemplate.feature.pagingsampler.ui
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import me.reim.androidtemplate.domain.QiitaArticle
+import me.reim.androidtemplate.domain.QiitaArticleRepository
+import me.reim.androidtemplate.domain.QiitaUserId
+import javax.inject.Inject
 
-class QiitaArticlesViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+@HiltViewModel
+class QiitaArticlesViewModel @Inject constructor(
+    private val qiitaArticleRepository: QiitaArticleRepository
+) : ViewModel() {
+    private var currentQueryValue: String? = null
+
+    private var currentSearchResult: Flow<PagingData<QiitaArticle>>? = null
+
+    fun search(queryString: String): Flow<PagingData<QiitaArticle>> {
+        val lastResult = currentSearchResult
+        if (queryString == currentQueryValue && lastResult != null) {
+            return lastResult
+        }
+        currentQueryValue = queryString
+        val newResult: Flow<PagingData<QiitaArticle>> =
+            qiitaArticleRepository.getArticleStream(QiitaUserId(queryString)).cachedIn(viewModelScope)
+        currentSearchResult = newResult
+        return newResult
+    }
 }

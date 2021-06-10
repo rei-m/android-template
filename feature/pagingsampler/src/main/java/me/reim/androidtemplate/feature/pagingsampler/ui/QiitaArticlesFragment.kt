@@ -13,33 +13,61 @@
 
 package me.reim.androidtemplate.feature.pagingsampler.ui
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import me.reim.androidtemplate.feature.pagingsampler.R
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import me.reim.androidtemplate.feature.pagingsampler.databinding.QiitaArticlesFragmentBinding
 
+@AndroidEntryPoint
 class QiitaArticlesFragment : Fragment() {
+    private var _binding: QiitaArticlesFragmentBinding? = null
+    private val binding get() = _binding!!
 
-    companion object {
-        fun newInstance() = QiitaArticlesFragment()
-    }
+    private val viewModel: QiitaArticlesViewModel by activityViewModels()
 
-    private lateinit var viewModel: QiitaArticlesViewModel
+    private val adapter = ArticlesAdapter()
+
+    private var searchJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.qiita_articles_fragment, container, false)
+        _binding = QiitaArticlesFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(QiitaArticlesViewModel::class.java)
-        // TODO: Use the ViewModel
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val decoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+        binding.listQiitaArticles.addItemDecoration(decoration)
+        binding.listQiitaArticles.adapter = adapter
+
+        search("rei-m")
+    }
+
+    private fun search(query: String) {
+        // Make sure we cancel the previous job before creating a new one
+        searchJob?.cancel()
+        searchJob = lifecycleScope.launch {
+            viewModel.search(query).collectLatest {
+                adapter.submitData(it)
+            }
+        }
     }
 
 }

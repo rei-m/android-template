@@ -48,4 +48,5 @@ android {
 dependencies {
     implementation libraries
     api navigation_libraries
+    api project(":domain")
 }

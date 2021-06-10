@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package me.reim.androidtemplate.ui.main
+package me.reim.androidtemplate.feature.pagingsampler.ui
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import me.reim.androidtemplate.R
 import me.reim.androidtemplate.domain.QiitaArticle
+import me.reim.androidtemplate.feature.pagingsampler.R
 
 class ArticleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val name: TextView = view.findViewById(R.id.article_name)

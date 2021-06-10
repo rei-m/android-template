@@ -11,7 +11,7 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.reim.androidtemplate.ui.main
+package me.reim.androidtemplate.feature.pagingsampler.ui
 
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
