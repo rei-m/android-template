@@ -22,8 +22,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import me.reim.androidtemplate.infrastructure.database.AppDatabase
 
-@InstallIn(SingletonComponent::class)
 @Module
+@InstallIn(SingletonComponent::class)
 object DatabaseModule {
     @Provides
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {

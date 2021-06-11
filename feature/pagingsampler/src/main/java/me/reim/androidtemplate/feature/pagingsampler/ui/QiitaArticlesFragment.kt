@@ -19,12 +19,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import me.reim.androidtemplate.feature.pagingsampler.databinding.QiitaArticlesFragmentBinding
 
 @AndroidEntryPoint
@@ -34,15 +30,12 @@ class QiitaArticlesFragment : Fragment() {
 
     private val viewModel: QiitaArticlesViewModel by activityViewModels()
 
-    private val adapter = ArticlesAdapter()
+    private val adapter = QiitaArticlesAdapter()
 
-    private var searchJob: Job? = null
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = QiitaArticlesFragmentBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
         return binding.root
     }
 
@@ -53,21 +46,13 @@ class QiitaArticlesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val decoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
         binding.listQiitaArticles.addItemDecoration(decoration)
         binding.listQiitaArticles.adapter = adapter
 
-        search("rei-m")
+        viewModel.qiitaArticlePage.observe(viewLifecycleOwner, {
+            adapter.submitData(lifecycle, it)
+        })
     }
-
-    private fun search(query: String) {
-        // Make sure we cancel the previous job before creating a new one
-        searchJob?.cancel()
-        searchJob = lifecycleScope.launch {
-            viewModel.search(query).collectLatest {
-                adapter.submitData(it)
-            }
-        }
-    }
-
 }

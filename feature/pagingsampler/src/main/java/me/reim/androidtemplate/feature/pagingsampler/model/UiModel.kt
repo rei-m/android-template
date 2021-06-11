@@ -11,11 +11,19 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.reim.androidtemplate.domain
+package me.reim.androidtemplate.feature.pagingsampler.model
 
-import androidx.paging.PagingData
-import kotlinx.coroutines.flow.Flow
+import me.reim.androidtemplate.domain.QiitaArticle
+import java.text.SimpleDateFormat
+import java.util.*
 
-interface QiitaArticleRepository {
-    fun getArticleStream(qiitaUserId: QiitaUserId): Flow<PagingData<QiitaArticle>>
+sealed class UiModel {
+    data class QiitaArticleItem(val qiitaArticle: QiitaArticle) : UiModel()
+    data class SeparatorItem(val description: String) : UiModel()
 }
+
+val UiModel.QiitaArticleItem.createdAtYearMonth: String
+    get() {
+        val dateFormatter = SimpleDateFormat("yyyy/MM", Locale.getDefault())
+        return dateFormatter.format(qiitaArticle.createdAt)
+    }

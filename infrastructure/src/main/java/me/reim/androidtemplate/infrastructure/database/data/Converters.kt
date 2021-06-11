@@ -11,11 +11,19 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.reim.androidtemplate.domain
+package me.reim.androidtemplate.infrastructure.database.data
 
-import androidx.paging.PagingData
-import kotlinx.coroutines.flow.Flow
+import androidx.room.TypeConverter
+import java.util.*
 
-interface QiitaArticleRepository {
-    fun getArticleStream(qiitaUserId: QiitaUserId): Flow<PagingData<QiitaArticle>>
+class Converters {
+    @TypeConverter
+    fun fromTimestamp(value: Long?): Date? {
+        return value?.let { Date(it) }
+    }
+
+    @TypeConverter
+    fun dateToTimestamp(date: Date?): Long? {
+        return date?.time
+    }
 }

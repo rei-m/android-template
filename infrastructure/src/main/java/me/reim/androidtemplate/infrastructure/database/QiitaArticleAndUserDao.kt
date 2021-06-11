@@ -44,13 +44,8 @@ interface QiitaArticleAndUserDao {
     @Transaction
     @Query(
         "SELECT * FROM qiita_articles " +
-                "WHERE qiita_user_id = :qiitaUserId"
+                "WHERE qiita_user_id = :qiitaUserId " +
+                "ORDER BY created_at DESC"
     )
     fun articleByQiitaUserId(qiitaUserId: String): PagingSource<Int, QiitaArticleAndUserData>
 }
-
-//@Query(
-//    "SELECT * FROM qiita_articles " +
-//            "WHERE qiita_user_id = :qiitaUserId " +
-//            "ORDER BY stars DESC"
-//)

@@ -15,6 +15,8 @@ package me.reim.androidtemplate.infrastructure.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import me.reim.androidtemplate.infrastructure.database.data.Converters
 import me.reim.androidtemplate.infrastructure.database.data.QiitaArticleData
 import me.reim.androidtemplate.infrastructure.database.data.QiitaArticleRemoteKey
 import me.reim.androidtemplate.infrastructure.database.data.QiitaUserData
@@ -24,6 +26,7 @@ import me.reim.androidtemplate.infrastructure.database.data.QiitaUserData
     version = 1,
     exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun qiitaArticleAndUserDao(): QiitaArticleAndUserDao
     abstract fun qiitaArticleRemoteKeyDao(): QiitaArticleRemoteKeyDao

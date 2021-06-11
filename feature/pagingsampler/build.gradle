@@ -46,7 +46,7 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures {
-        viewBinding = true
+        dataBinding = true
     }
 }
 
@@ -55,10 +55,10 @@ dependencies {
 
     implementation libraries
     implementation ui_libraries
+    implementation paging_library
     implementation lifecycle_libraries
     implementation hilt_liblary
     kapt hilt_compiler
-    implementation paging_library
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

@@ -26,6 +26,8 @@ import me.reim.androidtemplate.infrastructure.database.data.QiitaUserData
 import me.reim.androidtemplate.infrastructure.network.QiitaApiService
 import retrofit2.HttpException
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 @OptIn(ExperimentalPagingApi::class)
 class QiitaArticleMediator(
@@ -34,8 +36,6 @@ class QiitaArticleMediator(
     private val database: AppDatabase
 ) : RemoteMediator<Int, QiitaArticleAndUserData>() {
     override suspend fun load(loadType: LoadType, state: PagingState<Int, QiitaArticleAndUserData>): MediatorResult {
-        println("load!!")
-
         // stateは以前にロードされたページ、リスト内で最後にアクセスされたインデックス、およびページングストリームの初期化時に定義したPagingConfigに関する情報が得られます
         // loadTypeは以前にロードしたデータの最後（LoadType.APPEND）または最初（LoadType.PREPEND）でデータをロードする必要があるのか、それとも初めてデータをロードするのか（LoadType.REFRESH）がわかります
 
@@ -87,7 +87,9 @@ class QiitaArticleMediator(
                         id = it.id,
                         title = it.title,
                         body = it.body,
-                        qiitaUserOwnerId = qiitaUserData.id
+                        qiitaUserOwnerId = qiitaUserData.id,
+                        createdAt = dateFormatter.parse(it.createdAt)!!,
+                        updatedAt = dateFormatter.parse(it.updatedAt)!!
                     )
                 )
             }
@@ -145,5 +147,9 @@ class QiitaArticleMediator(
                 // Get the remote keys of the last item retrieved
                 database.qiitaArticleRemoteKeyDao().remoteKeyByQiitaArticleId(qiitaArticleAndUser.qiitaArticleData.id)
             }
+    }
+
+    companion object {
+        private val dateFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault())
     }
 }

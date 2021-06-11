@@ -12,5 +12,5 @@
   -->
 
 <resources>
-    <string name="search_qiita_user_id_hint">ユーザーIDを入力してください</string>
+    <string name="search_qiita_user_id_hint">Qiita User ID</string>
 </resources>

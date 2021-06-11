@@ -13,34 +13,70 @@
 
 package me.reim.androidtemplate.feature.pagingsampler.ui
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.insertSeparators
+import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import me.reim.androidtemplate.domain.QiitaArticle
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import me.reim.androidtemplate.domain.QiitaArticleRepository
 import me.reim.androidtemplate.domain.QiitaUserId
+import me.reim.androidtemplate.feature.pagingsampler.model.UiModel
+import me.reim.androidtemplate.feature.pagingsampler.model.createdAtYearMonth
 import javax.inject.Inject
 
 @HiltViewModel
 class QiitaArticlesViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val qiitaArticleRepository: QiitaArticleRepository
 ) : ViewModel() {
-    private var currentQueryValue: String? = null
+    private val initialQiitaUserIdText: String = savedStateHandle[QIITA_USER_ID_KEY] ?: let { DEFAULT_QIITA_USER_ID }
+    val qiitaUserIdText: MutableLiveData<String> = MutableLiveData(initialQiitaUserIdText)
 
-    private var currentSearchResult: Flow<PagingData<QiitaArticle>>? = null
+    private val inputtedQiitaUserIdTextStream: MutableStateFlow<String> = MutableStateFlow(initialQiitaUserIdText)
 
-    fun search(queryString: String): Flow<PagingData<QiitaArticle>> {
-        val lastResult = currentSearchResult
-        if (queryString == currentQueryValue && lastResult != null) {
-            return lastResult
+    @ExperimentalCoroutinesApi
+    val qiitaArticlePage: LiveData<PagingData<UiModel>> = inputtedQiitaUserIdTextStream.flatMapLatest { inputted ->
+        qiitaArticleRepository.getArticleStream(QiitaUserId(inputted)).map { pagingData ->
+            pagingData.map { UiModel.QiitaArticleItem(it) }
+        }.map { pagingData ->
+            pagingData.insertSeparators { before, after ->
+                if (after == null) {
+                    // afterがnullの場合はリストの最後なのでseparatorなし
+                    return@insertSeparators null
+                }
+
+                if (before == null) {
+                    // beforeがnullの場合はリストの先頭なのでseparatorを返す
+                    return@insertSeparators UiModel.SeparatorItem(after.createdAtYearMonth)
+                }
+
+                // before / after 両方要素が存在する場合はseparatorを返すか判定する
+                if (before.createdAtYearMonth != after.createdAtYearMonth) {
+                    UiModel.SeparatorItem(after.createdAtYearMonth)
+                } else {
+                    null
+                }
+            }
+        }.cachedIn(viewModelScope)
+    }.asLiveData()
+
+    private fun getArticles(inputted: String) {
+        if (inputted.isBlank()) {
+            return
         }
-        currentQueryValue = queryString
-        val newResult: Flow<PagingData<QiitaArticle>> =
-            qiitaArticleRepository.getArticleStream(QiitaUserId(queryString)).cachedIn(viewModelScope)
-        currentSearchResult = newResult
-        return newResult
+        inputtedQiitaUserIdTextStream.value = inputted
+        savedStateHandle[QIITA_USER_ID_KEY] = inputted
+    }
+
+    val getArticles: Function1<String, Unit> = this::getArticles
+
+    companion object {
+        private const val QIITA_USER_ID_KEY = "qiita_user_id_key"
+        private const val DEFAULT_QIITA_USER_ID = "rei-m"
     }
 }

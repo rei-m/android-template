@@ -7,17 +7,20 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import dagger.hilt.android.AndroidEntryPoint
+import me.reim.androidtemplate.databinding.MainActivityBinding
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: MainActivityBinding
 
     private val navController: NavController
         get() = findNavController(R.id.nav_host_fragment)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
-        setSupportActionBar(findViewById(R.id.toolbar))
+        binding = MainActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
     }
 
     override fun onStart() {

@@ -16,11 +16,14 @@ package me.reim.androidtemplate.infrastructure.database.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity(tableName = "qiita_articles")
 data class QiitaArticleData(
     @PrimaryKey(autoGenerate = false) val id: String,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "body") val body: String,
-    @ColumnInfo(name = "qiita_user_id") val qiitaUserOwnerId: String
+    @ColumnInfo(name = "qiita_user_id") val qiitaUserOwnerId: String,
+    @ColumnInfo(name = "created_at") val createdAt: Date,
+    @ColumnInfo(name = "updated_at") val updatedAt: Date,
 )

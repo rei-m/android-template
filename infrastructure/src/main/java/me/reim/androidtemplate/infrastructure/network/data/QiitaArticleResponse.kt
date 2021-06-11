@@ -13,6 +13,7 @@
 
 package me.reim.androidtemplate.infrastructure.network.data
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
@@ -21,4 +22,6 @@ data class QiitaArticleResponse(
     val title: String,
     val body: String,
     val user: QiitaArticleUserResponse,
+    @Json(name = "created_at") val createdAt: String,
+    @Json(name = "updated_at") val updatedAt: String,
 )

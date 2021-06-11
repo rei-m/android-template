@@ -17,7 +17,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.Dispatchers
 import me.reim.androidtemplate.domain.QiitaArticleRepository
 import me.reim.androidtemplate.infrastructure.database.AppDatabase
 import me.reim.androidtemplate.infrastructure.network.QiitaApiService
@@ -29,7 +28,6 @@ object RepositoryModule {
     @Provides
     fun provideQiitaArticleRepository(qiitaApiService: QiitaApiService, appDatabase: AppDatabase): QiitaArticleRepository =
         QiitaArticleRepositoryImpl(
-            Dispatchers.Default,
             qiitaApiService,
             appDatabase
         )
