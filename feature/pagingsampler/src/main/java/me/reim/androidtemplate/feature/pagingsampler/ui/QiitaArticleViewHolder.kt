@@ -16,25 +16,14 @@ package me.reim.androidtemplate.feature.pagingsampler.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import me.reim.androidtemplate.domain.QiitaArticle
 import me.reim.androidtemplate.feature.pagingsampler.databinding.ArticleViewItemBinding
 
 class QiitaArticleViewHolder(private val binding: ArticleViewItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    private var repo: QiitaArticle? = null
-
-    fun bind(article: QiitaArticle?) {
-        if (article == null) {
-            binding.articleName.text = "loading..."
-        } else {
-            showRepoData(article)
-        }
-    }
-
-    private fun showRepoData(article: QiitaArticle) {
-        this.repo = article
-        binding.articleName.text = article.title
-
+    fun bind(qiitaArticle: QiitaArticle?) {
+        binding.qiitaArticle = qiitaArticle
     }
 
     companion object {

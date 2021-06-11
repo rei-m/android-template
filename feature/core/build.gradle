@@ -52,5 +52,8 @@ android {
 dependencies {
     implementation libraries
     api navigation_libraries
+    api glide_library
+    kapt glide_compiler
+
     api project(":domain")
 }

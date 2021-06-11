@@ -14,24 +14,19 @@
 package me.reim.androidtemplate.feature.pagingsampler.ui
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import me.reim.androidtemplate.feature.pagingsampler.R
+import me.reim.androidtemplate.feature.pagingsampler.databinding.SeparatorViewItemBinding
 
-class SeparatorViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    private val description: TextView = view.findViewById(R.id.separator_description)
-
+class SeparatorViewHolder(private val binding: SeparatorViewItemBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(separatorText: String) {
-        description.text = separatorText
+        binding.textDescription.text = separatorText
     }
 
     companion object {
         fun create(parent: ViewGroup): SeparatorViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.separator_view_item, parent, false)
-            return SeparatorViewHolder(view)
+            val binding = SeparatorViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            return SeparatorViewHolder(binding)
         }
     }
 }

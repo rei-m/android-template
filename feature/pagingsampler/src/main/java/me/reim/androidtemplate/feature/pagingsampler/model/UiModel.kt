@@ -24,6 +24,6 @@ sealed class UiModel {
 
 val UiModel.QiitaArticleItem.createdAtYearMonth: String
     get() {
-        val dateFormatter = SimpleDateFormat("yyyy/MM", Locale.getDefault())
+        val dateFormatter = SimpleDateFormat("yyyy年MM月", Locale.getDefault())
         return dateFormatter.format(qiitaArticle.createdAt)
     }

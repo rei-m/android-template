@@ -11,22 +11,16 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.reim.androidtemplate.domain
+package me.reim.androidtemplate.feature.core.bindingadapter
 
-import java.text.SimpleDateFormat
-import java.util.*
+import android.widget.ImageView
+import androidx.databinding.BindingAdapter
+import com.bumptech.glide.Glide
 
-data class QiitaArticle(
-    override val id: QiitaArticleId,
-    val title: String,
-    val body: String,
-    val user: QiitaUser,
-    val createdAt: Date,
-    val updatedAt: Date,
-) : AbstractEntity<QiitaArticleId>(id) {
-    val createdAtDateText: String
-        get() {
-            val dateFormatter = SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault())
-            return dateFormatter.format(createdAt)
-        }
+@BindingAdapter("imageUrl")
+fun setImageUrl(imageView: ImageView, imageUrl: String?) {
+    imageUrl ?: return
+    Glide.with(imageView)
+        .load(imageUrl)
+        .into(imageView);
 }

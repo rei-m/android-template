@@ -24,6 +24,8 @@ buildscript {
         def lifecycle_version = '2.3.1'
         def recycler_view_version = '1.2.1'
 
+        def glide_version = '4.12.0'
+
         libraries = [
                 // Kotlin standard library
                 "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
@@ -62,6 +64,8 @@ buildscript {
                 "com.squareup.moshi:moshi-kotlin:$moshi_version",
         ]
 
+        moshi_compiler = "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+
         room_libraries = [
                 "androidx.room:room-runtime:$room_version",
                 "androidx.room:room-ktx:$room_version",
@@ -76,6 +80,9 @@ buildscript {
                 "androidx.navigation:navigation-fragment-ktx:$nav_version",
                 "androidx.navigation:navigation-ui-ktx:$nav_version",
         ]
+
+        glide_library = "com.github.bumptech.glide:glide:$glide_version"
+        glide_compiler = "com.github.bumptech.glide:compiler:$glide_version"
     }
 
     repositories {

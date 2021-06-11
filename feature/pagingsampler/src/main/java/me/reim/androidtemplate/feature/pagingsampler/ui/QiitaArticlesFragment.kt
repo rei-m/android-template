@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import me.reim.androidtemplate.feature.pagingsampler.databinding.QiitaArticlesFragmentBinding
 
 @AndroidEntryPoint
@@ -44,6 +45,7 @@ class QiitaArticlesFragment : Fragment() {
         _binding = null
     }
 
+    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
