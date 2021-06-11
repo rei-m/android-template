@@ -62,7 +62,7 @@ dependencies {
     implementation hilt_liblary
     kapt hilt_compiler
 
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.12.0"
+    kapt moshi_compiler
 
     api network_libraries
 

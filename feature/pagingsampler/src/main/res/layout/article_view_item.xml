@@ -14,18 +14,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="qiitaArticle"
+            type="me.reim.androidtemplate.domain.QiitaArticle" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="@dimen/spacing_s">
 
         <TextView
-            android:id="@+id/article_name"
+            android:id="@+id/text_article_created_at"
+            style="@style/Base.TextAppearance.AppCompat.Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@{qiitaArticle.createdAtDateText}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="android-architecture" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            tools:text="2020年12月22日" />
 
+        <TextView
+            android:id="@+id/text_article_title"
+            style="@style/Base.TextAppearance.AppCompat.Body1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{qiitaArticle.title}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_article_created_at"
+            tools:text="「今後必要になるプログラム言語」を読むに当たって" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
