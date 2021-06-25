@@ -13,7 +13,6 @@
 
 package me.reim.androidtemplate.domain
 
-import java.text.SimpleDateFormat
 import java.util.*
 
 data class QiitaArticle(
@@ -23,10 +22,4 @@ data class QiitaArticle(
     val user: QiitaUser,
     val createdAt: Date,
     val updatedAt: Date,
-) : AbstractEntity<QiitaArticleId>(id) {
-    val createdAtDateText: String
-        get() {
-            val dateFormatter = SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault())
-            return dateFormatter.format(createdAt)
-        }
-}
+) : AbstractEntity<QiitaArticleId>(id)

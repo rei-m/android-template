@@ -25,8 +25,8 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import me.reim.androidtemplate.domain.QiitaArticleRepository
 import me.reim.androidtemplate.domain.QiitaUserId
-import me.reim.androidtemplate.feature.pagingsampler.model.UiModel
-import me.reim.androidtemplate.feature.pagingsampler.model.createdAtYearMonth
+import me.reim.androidtemplate.feature.pagingsampler.presentationmodel.AdapterItem
+import me.reim.androidtemplate.feature.pagingsampler.presentationmodel.PresentationQiitaArticle
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,12 +37,12 @@ class QiitaArticlesViewModel @Inject constructor(
     private val initialQiitaUserIdText: String = savedStateHandle[QIITA_USER_ID_KEY] ?: let { DEFAULT_QIITA_USER_ID }
     val qiitaUserIdText: MutableLiveData<String> = MutableLiveData(initialQiitaUserIdText)
 
-    private val inputtedQiitaUserIdTextStream: MutableStateFlow<String> = MutableStateFlow(initialQiitaUserIdText)
+    private val searchQiitaUserIdTextStream: MutableStateFlow<String> = MutableStateFlow(initialQiitaUserIdText)
 
     @ExperimentalCoroutinesApi
-    val qiitaArticlePage: LiveData<PagingData<UiModel>> = inputtedQiitaUserIdTextStream.flatMapLatest { inputted ->
-        qiitaArticleRepository.getArticleStream(QiitaUserId(inputted)).map { pagingData ->
-            pagingData.map { UiModel.QiitaArticleItem(it) }
+    val qiitaArticlePage: LiveData<PagingData<AdapterItem>> = searchQiitaUserIdTextStream.flatMapLatest { inputted ->
+        qiitaArticleRepository.getArticleFlow(QiitaUserId(inputted)).map { pagingData ->
+            pagingData.map { AdapterItem.QiitaArticleItem(PresentationQiitaArticle(it)) }
         }.map { pagingData ->
             pagingData.insertSeparators { before, after ->
                 if (after == null) {
@@ -52,14 +52,14 @@ class QiitaArticlesViewModel @Inject constructor(
 
                 if (before == null) {
                     // beforeがnullの場合はリストの先頭なのでseparatorを返す
-                    return@insertSeparators UiModel.SeparatorItem(after.createdAtYearMonth)
+                    return@insertSeparators AdapterItem.SeparatorItem(after.qiitaArticle.createdAtYearMonth)
                 }
 
                 // before / after 両方要素が存在する場合はseparatorを返すか判定する
-                if (before.createdAtYearMonth != after.createdAtYearMonth) {
-                    UiModel.SeparatorItem(after.createdAtYearMonth)
-                } else {
+                if (before.qiitaArticle.isCreatedInSameYearMonth(after.qiitaArticle)) {
                     null
+                } else {
+                    AdapterItem.SeparatorItem(after.qiitaArticle.createdAtYearMonth)
                 }
             }
         }.cachedIn(viewModelScope)
@@ -69,7 +69,7 @@ class QiitaArticlesViewModel @Inject constructor(
         if (inputted.isBlank()) {
             return
         }
-        inputtedQiitaUserIdTextStream.value = inputted
+        searchQiitaUserIdTextStream.value = inputted
         savedStateHandle[QIITA_USER_ID_KEY] = inputted
     }
 

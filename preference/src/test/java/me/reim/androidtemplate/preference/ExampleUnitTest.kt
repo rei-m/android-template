@@ -11,11 +11,20 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.reim.androidtemplate.domain
+package me.reim.androidtemplate.preference
 
-import androidx.paging.PagingData
-import kotlinx.coroutines.flow.Flow
+import org.junit.Test
 
-interface QiitaArticleRepository {
-    fun getArticleFlow(qiitaUserId: QiitaUserId): Flow<PagingData<QiitaArticle>>
+import org.junit.Assert.*
+
+/**
+ * Example local unit test, which will execute on the development machine (host).
+ *
+ * See [testing documentation](http://d.android.com/tools/testing).
+ */
+class ExampleUnitTest {
+    @Test
+    fun addition_isCorrect() {
+        assertEquals(4, 2 + 2)
+    }
 }

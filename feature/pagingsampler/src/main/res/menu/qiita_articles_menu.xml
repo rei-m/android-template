@@ -11,10 +11,11 @@
   ~ the License for the specific language governing permissions and limitations under the License.
   -->
 
-<resources>
-    <string name="search_qiita_user_id_hint">Qiita User ID</string>
-    <string name="retry">再読み込み</string>
-    <string name="empty_message">見つかりませんでした</string>
-    <string name="access_token_setting">アクセストークン設定</string>
-    <string name="input_access_token_hint">Qiita ACCESS TOKEN</string>
-</resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/access_token_settings"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="@string/access_token_setting"
+        app:showAsAction="ifRoom" />
+</menu>

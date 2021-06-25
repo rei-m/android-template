@@ -18,44 +18,44 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import me.reim.androidtemplate.feature.pagingsampler.R
-import me.reim.androidtemplate.feature.pagingsampler.model.UiModel
+import me.reim.androidtemplate.feature.pagingsampler.presentationmodel.AdapterItem
 
-class QiitaArticlesAdapter : PagingDataAdapter<UiModel, RecyclerView.ViewHolder>(COMPARATOR) {
+class QiitaArticlesAdapter : PagingDataAdapter<AdapterItem, RecyclerView.ViewHolder>(COMPARATOR) {
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is UiModel.QiitaArticleItem -> R.layout.article_view_item
-            is UiModel.SeparatorItem -> R.layout.separator_view_item
-            null -> throw UnsupportedOperationException("Unknown view")
+            is AdapterItem.QiitaArticleItem -> R.layout.qiita_article_view_item
+            is AdapterItem.SeparatorItem -> R.layout.separator_view_item
+            else -> throw UnsupportedOperationException("Unknown view")
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         getItem(position).let {
             when (it) {
-                is UiModel.QiitaArticleItem -> (holder as QiitaArticleViewHolder).bind(it.qiitaArticle)
-                is UiModel.SeparatorItem -> (holder as SeparatorViewHolder).bind(it.description)
+                is AdapterItem.QiitaArticleItem -> (holder as QiitaArticleViewHolder).bind(it.qiitaArticle)
+                is AdapterItem.SeparatorItem -> (holder as SeparatorViewHolder).bind(it.description)
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            R.layout.article_view_item -> QiitaArticleViewHolder.create(parent)
+            R.layout.qiita_article_view_item -> QiitaArticleViewHolder.create(parent)
             R.layout.separator_view_item -> SeparatorViewHolder.create(parent)
             else -> throw UnsupportedOperationException("Unknown viewType")
         }
     }
 
     companion object {
-        private val COMPARATOR = object : DiffUtil.ItemCallback<UiModel>() {
-            override fun areItemsTheSame(oldItem: UiModel, newItem: UiModel): Boolean {
-                return (oldItem is UiModel.QiitaArticleItem && newItem is UiModel.QiitaArticleItem &&
+        private val COMPARATOR = object : DiffUtil.ItemCallback<AdapterItem>() {
+            override fun areItemsTheSame(oldItem: AdapterItem, newItem: AdapterItem): Boolean {
+                return (oldItem is AdapterItem.QiitaArticleItem && newItem is AdapterItem.QiitaArticleItem &&
                         oldItem.qiitaArticle == newItem.qiitaArticle) ||
-                        (oldItem is UiModel.SeparatorItem && newItem is UiModel.SeparatorItem &&
+                        (oldItem is AdapterItem.SeparatorItem && newItem is AdapterItem.SeparatorItem &&
                                 oldItem.description == newItem.description)
             }
 
-            override fun areContentsTheSame(oldItem: UiModel, newItem: UiModel): Boolean =
+            override fun areContentsTheSame(oldItem: AdapterItem, newItem: AdapterItem): Boolean =
                 oldItem == newItem
         }
     }

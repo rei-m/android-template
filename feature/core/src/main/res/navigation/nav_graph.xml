@@ -36,5 +36,14 @@
         android:id="@+id/qiita_articles_fragment"
         android:name="me.reim.androidtemplate.feature.pagingsampler.ui.QiitaArticlesFragment"
         android:label="test"
-        android:title="test"></fragment>
+        android:title="test">
+        <action
+            android:id="@+id/action_open_editAccessTokenDialog"
+            app:destination="@+id/edit_access_token_dialog_fragment" />
+    </fragment>
+
+    <dialog
+        android:id="@+id/edit_access_token_dialog_fragment"
+        android:name="me.reim.androidtemplate.feature.pagingsampler.ui.EditAccessTokenDialogFragment">
+    </dialog>
 </navigation>
