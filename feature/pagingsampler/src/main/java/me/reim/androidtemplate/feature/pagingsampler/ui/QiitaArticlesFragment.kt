@@ -104,7 +104,7 @@ class QiitaArticlesFragment : Fragment() {
                 binding.listQiitaArticles.scrollToPosition(0)
             })
 
-        viewModel.qiitaArticlePage.observe(viewLifecycleOwner, {
+        viewModel.qiitaArticlePageFlow.observe(viewLifecycleOwner, {
             adapter.submitData(lifecycle, it)
         })
     }

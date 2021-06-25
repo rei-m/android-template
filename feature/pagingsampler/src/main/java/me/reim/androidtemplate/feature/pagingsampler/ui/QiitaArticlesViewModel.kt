@@ -37,10 +37,10 @@ class QiitaArticlesViewModel @Inject constructor(
     private val initialQiitaUserIdText: String = savedStateHandle[QIITA_USER_ID_KEY] ?: let { DEFAULT_QIITA_USER_ID }
     val qiitaUserIdText: MutableLiveData<String> = MutableLiveData(initialQiitaUserIdText)
 
-    private val searchQiitaUserIdTextStream: MutableStateFlow<String> = MutableStateFlow(initialQiitaUserIdText)
+    private val searchQiitaUserIdTextFlow: MutableStateFlow<String> = MutableStateFlow(initialQiitaUserIdText)
 
     @ExperimentalCoroutinesApi
-    val qiitaArticlePage: LiveData<PagingData<AdapterItem>> = searchQiitaUserIdTextStream.flatMapLatest { inputted ->
+    val qiitaArticlePageFlow: LiveData<PagingData<AdapterItem>> = searchQiitaUserIdTextFlow.flatMapLatest { inputted ->
         qiitaArticleRepository.getArticleFlow(QiitaUserId(inputted)).map { pagingData ->
             pagingData.map { AdapterItem.QiitaArticleItem(PresentationQiitaArticle(it)) }
         }.map { pagingData ->
@@ -69,7 +69,7 @@ class QiitaArticlesViewModel @Inject constructor(
         if (inputted.isBlank()) {
             return
         }
-        searchQiitaUserIdTextStream.value = inputted
+        searchQiitaUserIdTextFlow.value = inputted
         savedStateHandle[QIITA_USER_ID_KEY] = inputted
     }
 
