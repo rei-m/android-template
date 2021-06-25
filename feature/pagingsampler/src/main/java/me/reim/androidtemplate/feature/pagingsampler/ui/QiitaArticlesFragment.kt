@@ -14,14 +14,18 @@
 package me.reim.androidtemplate.feature.pagingsampler.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.asLiveData
+import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
+import me.reim.androidtemplate.feature.pagingsampler.R
 import me.reim.androidtemplate.feature.pagingsampler.databinding.QiitaArticlesFragmentBinding
 
 @AndroidEntryPoint
@@ -45,13 +49,60 @@ class QiitaArticlesFragment : Fragment() {
         _binding = null
     }
 
-    @ExperimentalCoroutinesApi
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setUpToolbar()
+
+        setUpView()
+
+        subscribeUI()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.qiita_articles_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.access_token_settings -> {
+                val action = QiitaArticlesFragmentDirections.actionOpenEditAccessTokenDialog()
+                findNavController().navigate(action)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun setUpToolbar() {
+        setHasOptionsMenu(true)
+    }
+
+    private fun setUpView() {
         val decoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
         binding.listQiitaArticles.addItemDecoration(decoration)
-        binding.listQiitaArticles.adapter = adapter
+        binding.listQiitaArticles.adapter = adapter.withLoadStateHeaderAndFooter(
+            header = QiitaArticlesLoadStateAdapter { adapter.retry() },
+            footer = QiitaArticlesLoadStateAdapter { adapter.retry() }
+        )
+        adapter.addLoadStateListener { loadState ->
+            binding.isListEmpty = loadState.refresh is LoadState.NotLoading && adapter.itemCount == 0
+            binding.refreshLoadState = loadState.refresh
+        }
+        binding.buttonRetry.setOnClickListener { adapter.retry() }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun subscribeUI() {
+        adapter.loadStateFlow
+            .distinctUntilChangedBy { it.refresh }  // loadStateがRefreshから変わった場合のみemitされる
+            .filter { it.refresh is LoadState.NotLoading }
+            .asLiveData()   // 無理にLiveDataにしなくてもいいけど
+            .observe(viewLifecycleOwner, {
+                // これをやらないとリフレッシュ後の表示位置がTOPに戻らない
+                binding.listQiitaArticles.scrollToPosition(0)
+            })
 
         viewModel.qiitaArticlePage.observe(viewLifecycleOwner, {
             adapter.submitData(lifecycle, it)

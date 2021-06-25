@@ -16,19 +16,18 @@ package me.reim.androidtemplate.feature.pagingsampler.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import me.reim.androidtemplate.domain.QiitaArticle
-import me.reim.androidtemplate.feature.pagingsampler.databinding.ArticleViewItemBinding
+import me.reim.androidtemplate.feature.pagingsampler.databinding.QiitaArticleViewItemBinding
+import me.reim.androidtemplate.feature.pagingsampler.presentationmodel.PresentationQiitaArticle
 
-class QiitaArticleViewHolder(private val binding: ArticleViewItemBinding) : RecyclerView.ViewHolder(binding.root) {
+class QiitaArticleViewHolder(private val binding: QiitaArticleViewItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(qiitaArticle: QiitaArticle?) {
+    fun bind(qiitaArticle: PresentationQiitaArticle?) {
         binding.qiitaArticle = qiitaArticle
     }
 
     companion object {
         fun create(parent: ViewGroup): QiitaArticleViewHolder {
-            val binding = ArticleViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val binding = QiitaArticleViewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return QiitaArticleViewHolder(binding)
         }
     }

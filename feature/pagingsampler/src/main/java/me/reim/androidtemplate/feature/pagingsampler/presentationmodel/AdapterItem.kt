@@ -11,11 +11,9 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.reim.androidtemplate.domain
+package me.reim.androidtemplate.feature.pagingsampler.presentationmodel
 
-import androidx.paging.PagingData
-import kotlinx.coroutines.flow.Flow
-
-interface QiitaArticleRepository {
-    fun getArticleFlow(qiitaUserId: QiitaUserId): Flow<PagingData<QiitaArticle>>
+sealed class AdapterItem {
+    data class QiitaArticleItem(val qiitaArticle: PresentationQiitaArticle) : AdapterItem()
+    data class SeparatorItem(val description: String) : AdapterItem()
 }

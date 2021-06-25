@@ -11,19 +11,13 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-package me.reim.androidtemplate.feature.pagingsampler.model
+package me.reim.androidtemplate.feature.core.bindingadapter
 
-import me.reim.androidtemplate.domain.QiitaArticle
-import java.text.SimpleDateFormat
-import java.util.*
+import android.view.View
+import androidx.core.view.isVisible
+import androidx.databinding.BindingAdapter
 
-sealed class UiModel {
-    data class QiitaArticleItem(val qiitaArticle: QiitaArticle) : UiModel()
-    data class SeparatorItem(val description: String) : UiModel()
+@BindingAdapter("isVisible")
+fun setIsVisible(view: View, isVisible: Boolean) {
+    view.isVisible = isVisible
 }
-
-val UiModel.QiitaArticleItem.createdAtYearMonth: String
-    get() {
-        val dateFormatter = SimpleDateFormat("yyyy年MM月", Locale.getDefault())
-        return dateFormatter.format(qiitaArticle.createdAt)
-    }

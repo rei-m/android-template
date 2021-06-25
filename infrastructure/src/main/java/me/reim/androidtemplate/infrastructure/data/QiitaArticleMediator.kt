@@ -31,6 +31,7 @@ import java.util.*
 
 @OptIn(ExperimentalPagingApi::class)
 class QiitaArticleMediator(
+    private val qiitaAccessToken: String,
     private val qiitaUserId: String,
     private val service: QiitaApiService,
     private val database: AppDatabase
@@ -38,6 +39,10 @@ class QiitaArticleMediator(
     override suspend fun load(loadType: LoadType, state: PagingState<Int, QiitaArticleAndUserData>): MediatorResult {
         // stateは以前にロードされたページ、リスト内で最後にアクセスされたインデックス、およびページングストリームの初期化時に定義したPagingConfigに関する情報が得られます
         // loadTypeは以前にロードしたデータの最後（LoadType.APPEND）または最初（LoadType.PREPEND）でデータをロードする必要があるのか、それとも初めてデータをロードするのか（LoadType.REFRESH）がわかります
+
+        if (qiitaAccessToken.isBlank()) {
+            return MediatorResult.Error(Error("QiitaのAccessTokenが設定されていません"))
+        }
 
         val page = when (loadType) {
             LoadType.REFRESH -> {
@@ -69,7 +74,7 @@ class QiitaArticleMediator(
         }
 
         try {
-            val apiResponseItems = service.getItems(qiitaUserId, page)
+            val apiResponseItems = service.getItems("Bearer $qiitaAccessToken", qiitaUserId, page)
 
             val qiitaArticleDataList = mutableListOf<QiitaArticleData>()
             val qiitaUserDataSet = mutableSetOf<QiitaUserData>()

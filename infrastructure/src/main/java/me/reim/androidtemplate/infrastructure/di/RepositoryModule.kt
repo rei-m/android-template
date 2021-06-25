@@ -21,14 +21,20 @@ import me.reim.androidtemplate.domain.QiitaArticleRepository
 import me.reim.androidtemplate.infrastructure.database.AppDatabase
 import me.reim.androidtemplate.infrastructure.network.QiitaApiService
 import me.reim.androidtemplate.infrastructure.repository.QiitaArticleRepositoryImpl
+import me.reim.androidtemplate.preference.AppPreference
 
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
     @Provides
-    fun provideQiitaArticleRepository(qiitaApiService: QiitaApiService, appDatabase: AppDatabase): QiitaArticleRepository =
+    fun provideQiitaArticleRepository(
+        qiitaApiService: QiitaApiService,
+        appDatabase: AppDatabase,
+        appPreference: AppPreference
+    ): QiitaArticleRepository =
         QiitaArticleRepositoryImpl(
             qiitaApiService,
-            appDatabase
+            appDatabase,
+            appPreference
         )
 }

@@ -12,9 +12,6 @@
   -->
 
 <resources>
-    <string name="search_qiita_user_id_hint">Qiita User ID</string>
-    <string name="retry">再読み込み</string>
-    <string name="empty_message">見つかりませんでした</string>
-    <string name="access_token_setting">アクセストークン設定</string>
-    <string name="input_access_token_hint">Qiita ACCESS TOKEN</string>
+    <string name="set">設定</string>
+    <string name="back">戻る</string>
 </resources>

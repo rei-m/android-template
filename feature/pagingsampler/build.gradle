@@ -52,6 +52,7 @@ android {
 
 dependencies {
     implementation project(":feature:core")
+    implementation project(":preference")
 
     implementation libraries
     implementation ui_libraries

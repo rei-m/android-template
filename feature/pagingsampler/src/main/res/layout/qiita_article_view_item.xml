@@ -18,7 +18,7 @@
 
         <variable
             name="qiitaArticle"
-            type="me.reim.androidtemplate.domain.QiitaArticle" />
+            type="me.reim.androidtemplate.feature.pagingsampler.presentationmodel.PresentationQiitaArticle" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +31,7 @@
             style="@style/Base.TextAppearance.AppCompat.Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{qiitaArticle.createdAtDateText}"
+            android:text="@{qiitaArticle.createdAtDate}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
