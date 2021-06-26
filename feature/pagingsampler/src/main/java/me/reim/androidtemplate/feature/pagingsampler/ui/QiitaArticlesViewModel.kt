@@ -23,8 +23,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import me.reim.androidtemplate.domain.QiitaArticleRepository
-import me.reim.androidtemplate.domain.QiitaUserId
+import me.reim.androidtemplate.domain.qiita.QiitaArticleRepository
+import me.reim.androidtemplate.domain.qiita.QiitaUserId
 import me.reim.androidtemplate.feature.pagingsampler.presentationmodel.AdapterItem
 import me.reim.androidtemplate.feature.pagingsampler.presentationmodel.PresentationQiitaArticle
 import javax.inject.Inject

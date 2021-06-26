@@ -1,7 +1,8 @@
 rootProject.name = "Android Template"
 include ':app'
-include ':domain'
 include ':infrastructure'
+include ':preference'
+include ':domain:common'
+include ':domain:qiita'
 include ':feature:core'
 include ':feature:pagingsampler'
-include ':preference'

@@ -43,9 +43,12 @@ dependencies {
     implementation hilt_liblary
     kapt hilt_compiler
 
-    implementation project(":domain")
+    implementation project(":domain:common")
+    implementation project(":domain:qiita")
+
     implementation project(":infrastructure")
     implementation project(":preference")
+
     implementation project(":feature:core")
     implementation project(":feature:pagingsampler")
 

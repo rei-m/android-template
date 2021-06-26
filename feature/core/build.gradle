@@ -55,5 +55,5 @@ dependencies {
     api glide_library
     kapt glide_compiler
 
-    api project(":domain")
+    implementation project(":domain:common")
 }
