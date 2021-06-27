@@ -13,7 +13,7 @@
 
 package me.reim.androidtemplate.feature.pagingsampler.presentationmodel
 
-import me.reim.androidtemplate.domain.QiitaArticle
+import me.reim.androidtemplate.domain.qiita.QiitaArticle
 import java.text.SimpleDateFormat
 import java.util.*
 

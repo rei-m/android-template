@@ -86,15 +86,16 @@ class QiitaArticlesFragment : Fragment() {
             header = QiitaArticlesLoadStateAdapter { adapter.retry() },
             footer = QiitaArticlesLoadStateAdapter { adapter.retry() }
         )
-        adapter.addLoadStateListener { loadState ->
-            binding.isListEmpty = loadState.refresh is LoadState.NotLoading && adapter.itemCount == 0
-            binding.refreshLoadState = loadState.refresh
-        }
         binding.buttonRetry.setOnClickListener { adapter.retry() }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun subscribeUI() {
+        adapter.loadStateFlow.asLiveData().observe(viewLifecycleOwner, { loadState ->
+            binding.isListEmpty = loadState.refresh is LoadState.NotLoading && adapter.itemCount == 0
+            binding.refreshLoadState = loadState.refresh
+        })
+
         adapter.loadStateFlow
             .distinctUntilChangedBy { it.refresh }  // loadStateがRefreshから変わった場合のみemitされる
             .filter { it.refresh is LoadState.NotLoading }
@@ -104,7 +105,7 @@ class QiitaArticlesFragment : Fragment() {
                 binding.listQiitaArticles.scrollToPosition(0)
             })
 
-        viewModel.qiitaArticlePage.observe(viewLifecycleOwner, {
+        viewModel.qiitaArticlePageFlow.observe(viewLifecycleOwner, {
             adapter.submitData(lifecycle, it)
         })
     }

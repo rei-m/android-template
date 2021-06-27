@@ -17,7 +17,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import me.reim.androidtemplate.domain.QiitaArticleRepository
+import me.reim.androidtemplate.domain.qiita.QiitaArticleRepository
 import me.reim.androidtemplate.infrastructure.database.AppDatabase
 import me.reim.androidtemplate.infrastructure.network.QiitaApiService
 import me.reim.androidtemplate.infrastructure.repository.QiitaArticleRepositoryImpl

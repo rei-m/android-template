@@ -52,7 +52,8 @@ android {
 }
 
 dependencies {
-    implementation project(":domain")
+    implementation project(":domain:common")
+    implementation project(":domain:qiita")
     implementation project(":preference")
 
     implementation libraries

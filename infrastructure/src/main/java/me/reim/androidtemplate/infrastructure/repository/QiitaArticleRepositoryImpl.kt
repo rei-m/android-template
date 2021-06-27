@@ -18,7 +18,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import me.reim.androidtemplate.domain.*
+import me.reim.androidtemplate.domain.qiita.*
 import me.reim.androidtemplate.infrastructure.data.QiitaArticleMediator
 import me.reim.androidtemplate.infrastructure.database.AppDatabase
 import me.reim.androidtemplate.infrastructure.network.QiitaApiService
