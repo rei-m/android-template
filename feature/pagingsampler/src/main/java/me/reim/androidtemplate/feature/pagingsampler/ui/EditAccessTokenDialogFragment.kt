@@ -21,6 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.reim.androidtemplate.feature.pagingsampler.R
 import me.reim.androidtemplate.preference.AppPreference
@@ -38,10 +39,17 @@ class EditAccessTokenDialogFragment : DialogFragment() {
         val inflater = requireActivity().layoutInflater
 
         val dialogView = inflater.inflate(R.layout.edit_access_token_dialog, null)
+        val editAccessToken = dialogView.findViewById<EditText>(R.id.edit_text_qiita_access_token)
+
+        lifecycleScope.launch {
+            appPreference.qiitaAccessTokenFlow.collectLatest {
+                editAccessToken.setText(it)
+            }
+        }
+
         builder.setView(dialogView)
             .setTitle(R.string.access_token_setting)
             .setPositiveButton(R.string.set) { _, _ ->
-                val editAccessToken = dialogView.findViewById<EditText>(R.id.edit_text_qiita_access_token)
                 lifecycleScope.launch {
                     appPreference.setQiitaAccessToken(editAccessToken?.text.toString())
                 }

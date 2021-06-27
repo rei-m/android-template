@@ -18,6 +18,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import me.reim.androidtemplate.domain.qiita.exception.QiitaAccessTokenMissingException
 import me.reim.androidtemplate.infrastructure.database.AppDatabase
 import me.reim.androidtemplate.infrastructure.database.data.QiitaArticleAndUserData
 import me.reim.androidtemplate.infrastructure.database.data.QiitaArticleData
@@ -41,7 +42,7 @@ class QiitaArticleMediator(
         // loadTypeは以前にロードしたデータの最後（LoadType.APPEND）または最初（LoadType.PREPEND）でデータをロードする必要があるのか、それとも初めてデータをロードするのか（LoadType.REFRESH）がわかります
 
         if (qiitaAccessToken.isBlank()) {
-            return MediatorResult.Error(Error("QiitaのAccessTokenが設定されていません"))
+            return MediatorResult.Error(QiitaAccessTokenMissingException())
         }
 
         val page = when (loadType) {
