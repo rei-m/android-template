@@ -25,8 +25,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
+import me.reim.androidtemplate.domain.qiita.exception.QiitaAccessTokenMissingException
+import me.reim.androidtemplate.feature.core.ErrorHandler
 import me.reim.androidtemplate.feature.pagingsampler.R
 import me.reim.androidtemplate.feature.pagingsampler.databinding.QiitaArticlesFragmentBinding
+import retrofit2.HttpException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 @AndroidEntryPoint
 class QiitaArticlesFragment : Fragment() {
@@ -36,6 +41,8 @@ class QiitaArticlesFragment : Fragment() {
     private val viewModel: QiitaArticlesViewModel by activityViewModels()
 
     private val adapter = QiitaArticlesAdapter()
+
+    private val errorHandler = ErrorHandler()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = QiitaArticlesFragmentBinding.inflate(inflater, container, false)
@@ -92,8 +99,18 @@ class QiitaArticlesFragment : Fragment() {
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun subscribeUI() {
         adapter.loadStateFlow.asLiveData().observe(viewLifecycleOwner, { loadState ->
-            binding.isListEmpty = loadState.refresh is LoadState.NotLoading && adapter.itemCount == 0
-            binding.refreshLoadState = loadState.refresh
+            val refreshLoadState = loadState.refresh
+            binding.refreshLoadState = refreshLoadState
+            binding.message = null
+            binding.isVisibleRetryButton = false
+
+            if (refreshLoadState is LoadState.NotLoading && adapter.itemCount == 0) {
+                binding.message = getString(R.string.message_empty)
+            }
+
+            if (refreshLoadState is LoadState.Error) {
+                handleRefreshError(refreshLoadState.error)
+            }
         })
 
         adapter.loadStateFlow
@@ -105,8 +122,39 @@ class QiitaArticlesFragment : Fragment() {
                 binding.listQiitaArticles.scrollToPosition(0)
             })
 
-        viewModel.qiitaArticlePageFlow.observe(viewLifecycleOwner, {
+        viewModel.qiitaArticlePage.observe(viewLifecycleOwner, {
             adapter.submitData(lifecycle, it)
         })
+    }
+
+    private fun handleRefreshError(error: Throwable) {
+        when (error) {
+            is QiitaAccessTokenMissingException -> {
+                binding.message = getString(R.string.message_not_found_access_token)
+                binding.isVisibleRetryButton = false
+                return
+            }
+            is SocketTimeoutException,
+            is UnknownHostException -> {
+                binding.message = getString(R.string.message_timeout)
+                binding.isVisibleRetryButton = true
+                return
+            }
+            is HttpException -> {
+                when (error.code()) {
+                    401 -> {
+                        binding.message = getString(R.string.message_invalid_access_token)
+                        binding.isVisibleRetryButton = false
+                        return
+                    }
+                    404 -> {
+                        binding.message = getString(R.string.message_not_found_user_id)
+                        binding.isVisibleRetryButton = false
+                        return
+                    }
+                }
+            }
+        }
+        errorHandler.handle(requireContext(), binding.root, error)
     }
 }

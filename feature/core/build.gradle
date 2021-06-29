@@ -54,6 +54,7 @@ dependencies {
     api navigation_libraries
     api glide_library
     kapt glide_compiler
+    implementation network_libraries
 
     implementation project(":domain:common")
 }
