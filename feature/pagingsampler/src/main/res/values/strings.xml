@@ -14,7 +14,12 @@
 <resources>
     <string name="search_qiita_user_id_hint">Qiita User ID</string>
     <string name="retry">再読み込み</string>
-    <string name="empty_message">見つかりませんでした</string>
     <string name="access_token_setting">アクセストークン設定</string>
     <string name="input_access_token_hint">Qiita ACCESS TOKEN</string>
+
+    <string name="message_empty">記事が見つかりませんでした</string>
+    <string name="message_not_found_access_token">Qiitaのアクセストークンを設定してください。</string>
+    <string name="message_timeout">読み込みに時間がかかっています。しばらく時間をおいた後、お試しください。</string>
+    <string name="message_invalid_access_token">アクセストークンが無効です。もう一度設定してください。</string>
+    <string name="message_not_found_user_id">指定したユーザーIDは存在しません。</string>
 </resources>

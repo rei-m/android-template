@@ -40,7 +40,7 @@ class QiitaArticlesViewModel @Inject constructor(
     private val searchQiitaUserIdTextFlow: MutableStateFlow<String> = MutableStateFlow(initialQiitaUserIdText)
 
     @ExperimentalCoroutinesApi
-    val qiitaArticlePageFlow: LiveData<PagingData<AdapterItem>> = searchQiitaUserIdTextFlow.flatMapLatest { inputted ->
+    val qiitaArticlePage: LiveData<PagingData<AdapterItem>> = searchQiitaUserIdTextFlow.flatMapLatest { inputted ->
         qiitaArticleRepository.getArticleFlow(QiitaUserId(inputted)).map { pagingData ->
             pagingData.map { AdapterItem.QiitaArticleItem(PresentationQiitaArticle(it)) }
         }.map { pagingData ->
