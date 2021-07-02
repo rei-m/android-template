@@ -39,9 +39,13 @@ android {
 
 dependencies {
     implementation libraries
+    implementation startup_library
+
     implementation ui_libraries
     implementation hilt_liblary
     kapt hilt_compiler
+
+    implementation project(':util')
 
     implementation project(":domain:common")
     implementation project(":domain:qiita")

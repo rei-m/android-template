@@ -13,8 +13,16 @@
 
 package me.reim.androidtemplate
 
-import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import android.content.Context
+import androidx.startup.Initializer
+import me.reim.androidtemplate.util.Logger
 
-@HiltAndroidApp
-class App : Application()
+class LoggerInitializer : Initializer<Unit> {
+    override fun create(context: Context) {
+        Logger.init(BuildConfig.DEBUG)
+    }
+
+    override fun dependencies(): List<Class<out Initializer<*>>> {
+        return emptyList()
+    }
+}

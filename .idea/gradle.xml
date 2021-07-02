@@ -20,6 +20,7 @@
             <option value="$PROJECT_DIR$/feature/pagingsampler" />
             <option value="$PROJECT_DIR$/infrastructure" />
             <option value="$PROJECT_DIR$/preference" />
+            <option value="$PROJECT_DIR$/util" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
