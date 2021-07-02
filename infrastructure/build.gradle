@@ -55,6 +55,7 @@ dependencies {
     implementation project(":domain:common")
     implementation project(":domain:qiita")
     implementation project(":preference")
+    implementation project(":util")
 
     implementation libraries
 

@@ -19,8 +19,10 @@ import java.util.*
 
 data class PresentationQiitaArticle(private val model: QiitaArticle) {
     val title: String = model.title
+
     val createdAtDate: String
         get() = formatCreatedAt("yyyy年MM月dd日")
+
     val createdAtYearMonth: String
         get() = formatCreatedAt("yyyy年MM月")
 

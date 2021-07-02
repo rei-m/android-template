@@ -38,6 +38,8 @@ buildscript {
                 "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_android_version",
         ]
 
+        reflection_library = "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
         startup_library = "androidx.startup:startup-runtime:$startup_version"
 
         ui_libraries = [
@@ -95,6 +97,40 @@ buildscript {
 
         // Logger
         timber_library = "com.jakewharton.timber:timber:$timber_version"
+
+        test_libraries = [
+                "org.jetbrains.kotlin:kotlin-test:$kotlin_version",
+                "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version",
+                "org.spekframework.spek2:spek-dsl-jvm:2.0.15",
+                "org.spekframework.spek2:spek-runner-junit5:2.0.15",
+                // + kotlin-reflectも必要
+        ]
+
+        // Spek用の設定
+        spek_android_setup = {
+            sourceSets.each {
+                it.java.srcDirs += "src/$it.name/kotlin"
+            }
+
+            testOptions {
+                junitPlatform {
+                    filters {
+                        engines {
+                            include 'spek2'
+                        }
+                    }
+                    jacocoOptions {
+                        // here goes all jacoco config, for example
+                        html.enabled = true
+                        xml.enabled = false
+                        csv.enabled = false
+                    }
+                }
+                unitTests.all {
+                    testLogging.events = ["passed", "skipped", "failed"]
+                }
+            }
+        }
     }
 
     repositories {
@@ -107,6 +143,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath "de.mannodermaus.gradle.plugins:android-junit5:1.7.1.1"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
