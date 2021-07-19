@@ -18,7 +18,11 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import me.reim.androidtemplate.domain.common.exception.MaintenanceException
+import me.reim.androidtemplate.domain.common.exception.TimeoutException
+import me.reim.androidtemplate.domain.qiita.exception.InvalidQiitaAccessTokenException
 import me.reim.androidtemplate.domain.qiita.exception.QiitaAccessTokenMissingException
+import me.reim.androidtemplate.domain.qiita.exception.QiitaUserNotFoundException
 import me.reim.androidtemplate.infrastructure.database.AppDatabase
 import me.reim.androidtemplate.infrastructure.database.data.QiitaArticleAndUserData
 import me.reim.androidtemplate.infrastructure.database.data.QiitaArticleData
@@ -27,6 +31,8 @@ import me.reim.androidtemplate.infrastructure.database.data.QiitaUserData
 import me.reim.androidtemplate.infrastructure.network.QiitaApiService
 import retrofit2.HttpException
 import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -118,8 +124,25 @@ class QiitaArticleMediator(
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: IOException) {
             return MediatorResult.Error(exception)
+        } catch (exception: UnknownHostException) {
+            return MediatorResult.Error(TimeoutException(exception))
+        } catch (exception: SocketTimeoutException) {
+            return MediatorResult.Error(TimeoutException(exception))
         } catch (exception: HttpException) {
-            return MediatorResult.Error(exception)
+            return when (exception.code()) {
+                401 -> {
+                    MediatorResult.Error(InvalidQiitaAccessTokenException())
+                }
+                404 -> {
+                    MediatorResult.Error(QiitaUserNotFoundException())
+                }
+                503 -> {
+                    MediatorResult.Error(MaintenanceException(exception))
+                }
+                else -> {
+                    MediatorResult.Error(exception)
+                }
+            }
         }
     }
 

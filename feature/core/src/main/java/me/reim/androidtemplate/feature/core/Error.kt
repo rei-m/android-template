@@ -15,7 +15,7 @@ package me.reim.androidtemplate.feature.core
 
 import android.content.Context
 import android.view.View
-import retrofit2.HttpException
+import me.reim.androidtemplate.domain.common.exception.MaintenanceException
 
 sealed class Error {
     abstract fun handle()
@@ -39,6 +39,7 @@ sealed class Error {
         override fun handle() {
             // Crashlyticsに送る
             TODO("Not yet implemented")
+
         }
     }
 
@@ -47,8 +48,8 @@ sealed class Error {
             context: Context,
             view: View,
             throwable: Throwable
-        ): Error = when {
-            throwable is HttpException && throwable.code() == 503 -> MaintenanceError(context)
+        ): Error = when (throwable) {
+            is MaintenanceException -> MaintenanceError(context)
             else -> UnhandledError(view, throwable)
         }
     }

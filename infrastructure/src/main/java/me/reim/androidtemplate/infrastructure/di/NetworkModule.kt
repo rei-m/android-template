@@ -18,6 +18,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
+import me.reim.androidtemplate.util.Logger
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -35,7 +36,9 @@ object NetworkModule {
 
     @Provides
     @IntoSet
-    fun provideNetworkLogger(): Interceptor = HttpLoggingInterceptor().apply {
+    fun provideNetworkLogger(): Interceptor = HttpLoggingInterceptor {
+        Logger.tag("OkHttp").d(it)
+    }.apply {
         level = HttpLoggingInterceptor.Level.BASIC
     }
 }

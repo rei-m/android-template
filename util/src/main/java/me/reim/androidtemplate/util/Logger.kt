@@ -37,6 +37,11 @@ object Logger {
         }
     }
 
+    fun tag(tag: String): Logger {
+        Timber.tag(tag)
+        return this
+    }
+
     fun d(message: String, vararg args: Any?) = Timber.d(message, *args)
 
     fun d(t: Throwable, message: String, vararg args: Any?) = Timber.d(message, message, *args)

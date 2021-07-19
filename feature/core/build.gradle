@@ -16,18 +16,13 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs.kotlin'
+    id 'de.mannodermaus.android-junit5'
 }
 
 android {
-    compileSdkVersion compile_sdk_version
-
     defaultConfig {
-        minSdkVersion min_sdk_version
-        targetSdkVersion compile_sdk_version
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
 
@@ -37,24 +32,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
     buildFeatures {
         dataBinding = true
     }
 }
 
 dependencies {
-    implementation libraries
-    api navigation_libraries
-    api glide_library
-    kapt glide_compiler
-    implementation network_libraries
-
     implementation project(":domain:common")
 }
+
+apply from: '../../gradle/configAndroid.gradle'
+apply from: '../../gradle/configTest.gradle'
+apply from: '../../gradle/configAndroidTest.gradle'
+apply from: '../../gradle/depsFeatureCore.gradle'

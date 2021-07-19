@@ -11,27 +11,14 @@
  * the License for the specific language governing permissions and limitations under the License.
  */
 
-plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
-    id 'de.mannodermaus.android-junit5'
+dependencies {
+    api "com.github.bumptech.glide:glide:4.12.0"
+    kapt "com.github.bumptech.glide:compiler:4.12.0"
+
+    api "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    api "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    api "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+    api "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
+    api "androidx.lifecycle:lifecycle-livedata-ktx:2.3.1"
 }
-
-android {
-    defaultConfig {
-        versionCode 1
-        versionName "1.0"
-        consumerProguardFiles "consumer-rules.pro"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-}
-
-apply from: '../gradle/configAndroid.gradle'
-apply from: '../gradle/configTest.gradle'
-apply from: '../gradle/depsTimber.gradle'

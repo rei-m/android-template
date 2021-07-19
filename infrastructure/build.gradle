@@ -15,39 +15,21 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'de.mannodermaus.android-junit5'
 }
 
 android {
-    compileSdkVersion compile_sdk_version
-
     defaultConfig {
-        minSdkVersion min_sdk_version
-        targetSdkVersion compile_sdk_version
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
         release {
-            // Enables code shrinking, obfuscation, and optimization for only
-            // your project's release build type.
             minifyEnabled true
-
-            // Includes the default ProGuard rules files that are packaged with
-            // the Android Gradle plugin. To learn more, go to the section about
-            // R8 configuration files.
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
     }
 }
 
@@ -55,30 +37,16 @@ dependencies {
     implementation project(":domain:common")
     implementation project(":domain:qiita")
     implementation project(":preference")
-
-    implementation libraries
-
-    api room_libraries
-    kapt room_compiler
-
-    implementation hilt_liblary
-    kapt hilt_compiler
-
-    kapt moshi_compiler
-
-    api network_libraries
-
-    api paging_library
-
-    // For instrumentation tests
-    androidTestImplementation hilt_testing_liblary
-    kaptAndroidTest hilt_compiler
-
-    // For local unit tests
-    testImplementation hilt_testing_liblary
-    kaptTest hilt_compiler
+    implementation project(":util")
 }
 
 kapt {
     correctErrorTypes true
 }
+
+apply from: '../gradle/configAndroid.gradle'
+apply from: '../gradle/configTest.gradle'
+apply from: '../gradle/configAndroidTest.gradle'
+apply from: '../gradle/depsHilt.gradle'
+apply from: '../gradle/depsPaging.gradle'
+apply from: '../gradle/depsInfrastructure.gradle'

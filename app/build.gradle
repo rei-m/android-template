@@ -7,16 +7,10 @@ plugins {
 }
 
 android {
-    compileSdkVersion compile_sdk_version
-
     defaultConfig {
         applicationId "me.reim.androidtemplate"
-        minSdkVersion min_sdk_version
-        targetSdkVersion compile_sdk_version
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -25,26 +19,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
     buildFeatures {
         dataBinding = true
     }
 }
 
 dependencies {
-    implementation libraries
-    implementation startup_library
-
-    implementation ui_libraries
-    implementation hilt_liblary
-    kapt hilt_compiler
-
     implementation project(':util')
 
     implementation project(":domain:common")
@@ -55,11 +35,12 @@ dependencies {
 
     implementation project(":feature:core")
     implementation project(":feature:pagingsampler")
-
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
+
+apply from: '../gradle/configAndroid.gradle'
+apply from: '../gradle/depsApp.gradle'
+apply from: '../gradle/depsHilt.gradle'
+apply from: '../gradle/depsUI.gradle'
 
 configurations {
     ktlint
