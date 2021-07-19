@@ -25,13 +25,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
+import me.reim.androidtemplate.domain.common.exception.TimeoutException
+import me.reim.androidtemplate.domain.qiita.exception.InvalidQiitaAccessTokenException
 import me.reim.androidtemplate.domain.qiita.exception.QiitaAccessTokenMissingException
+import me.reim.androidtemplate.domain.qiita.exception.QiitaUserNotFoundException
 import me.reim.androidtemplate.feature.core.ErrorHandler
 import me.reim.androidtemplate.feature.pagingsampler.R
 import me.reim.androidtemplate.feature.pagingsampler.databinding.QiitaArticlesFragmentBinding
-import retrofit2.HttpException
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 
 @AndroidEntryPoint
 class QiitaArticlesFragment : Fragment() {
@@ -132,29 +132,22 @@ class QiitaArticlesFragment : Fragment() {
             is QiitaAccessTokenMissingException -> {
                 binding.message = getString(R.string.message_not_found_access_token)
                 binding.isVisibleRetryButton = false
-                return
             }
-            is SocketTimeoutException,
-            is UnknownHostException -> {
+            is InvalidQiitaAccessTokenException -> {
+                binding.message = getString(R.string.message_invalid_access_token)
+                binding.isVisibleRetryButton = false
+            }
+            is QiitaUserNotFoundException -> {
+                binding.message = getString(R.string.message_not_found_user_id)
+                binding.isVisibleRetryButton = false
+            }
+            is TimeoutException -> {
                 binding.message = getString(R.string.message_timeout)
                 binding.isVisibleRetryButton = true
-                return
             }
-            is HttpException -> {
-                when (error.code()) {
-                    401 -> {
-                        binding.message = getString(R.string.message_invalid_access_token)
-                        binding.isVisibleRetryButton = false
-                        return
-                    }
-                    404 -> {
-                        binding.message = getString(R.string.message_not_found_user_id)
-                        binding.isVisibleRetryButton = false
-                        return
-                    }
-                }
+            else -> {
+                errorHandler.handle(requireContext(), binding.root, error)
             }
         }
-        errorHandler.handle(requireContext(), binding.root, error)
     }
 }

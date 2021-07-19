@@ -13,18 +13,30 @@
 
 package me.reim.androidtemplate.util
 
-import org.junit.Test
+import org.junit.jupiter.api.Assertions
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-import org.junit.Assert.*
-
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
-    @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+class Calculator {
+    fun add(a: Int, b: Int): Int {
+        return a + b
     }
 }
+
+object ExampleSpekUnitTest : Spek({
+    describe("A Calculator") {
+        val calculator by memoized { Calculator() }
+
+        it("should return 4") {
+            Assertions.assertEquals(4, calculator.add(2, 2))
+        }
+
+        it("should return 10") {
+            Assertions.assertEquals(10, calculator.add(5, 5))
+        }
+
+        it("should return 12") {
+            Assertions.assertEquals(12, calculator.add(6, 6))
+        }
+    }
+})

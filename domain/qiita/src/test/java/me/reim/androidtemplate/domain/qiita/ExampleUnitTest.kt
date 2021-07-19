@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-class Calculator() {
+class Calculator {
     fun add(a: Int, b: Int): Int {
         return a + b
     }

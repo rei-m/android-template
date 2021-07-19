@@ -15,18 +15,13 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'de.mannodermaus.android-junit5'
 }
 
 android {
-    compileSdkVersion compile_sdk_version
-
     defaultConfig {
-        minSdkVersion min_sdk_version
-        targetSdkVersion compile_sdk_version
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
 
@@ -36,20 +31,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
 }
 
-dependencies {
-    implementation libraries
-
-    implementation hilt_liblary
-    kapt hilt_compiler
-
-    implementation datastore_libraries
-}
+apply from: '../gradle/configAndroid.gradle'
+apply from: '../gradle/configTest.gradle'
+apply from: '../gradle/configAndroidTest.gradle'
+apply from: '../gradle/depsHilt.gradle'
+apply from: '../gradle/depsDatastorePreferences.gradle'
