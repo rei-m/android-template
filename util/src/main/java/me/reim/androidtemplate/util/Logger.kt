@@ -44,7 +44,7 @@ object Logger {
 
     fun d(message: String, vararg args: Any?) = Timber.d(message, *args)
 
-    fun d(t: Throwable, message: String, vararg args: Any?) = Timber.d(message, message, *args)
+    fun d(t: Throwable, message: String, vararg args: Any?) = Timber.d(t, message, *args)
 
     fun d(t: Throwable) = Timber.d(t)
 

@@ -32,6 +32,13 @@
                 android:layout_height="wrap_content"
                 android:elevation="@dimen/elevation_contained_button"
                 android:text="@string/feature_paging_sampler" />
+
+            <Button
+                android:id="@+id/open_compose_sampler_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/elevation_contained_button"
+                android:text="@string/feature_compose_sampler" />
         </LinearLayout>
     </ScrollView>
 </layout>
