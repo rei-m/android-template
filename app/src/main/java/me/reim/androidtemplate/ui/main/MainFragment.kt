@@ -50,6 +50,5 @@ class MainFragment : Fragment() {
             val action = MainFragmentDirections.actionMainToComposeMain()
             findNavController().navigate(action)
         }
-
     }
 }
