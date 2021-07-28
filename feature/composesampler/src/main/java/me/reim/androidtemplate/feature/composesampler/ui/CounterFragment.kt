@@ -17,65 +17,88 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import me.reim.androidtemplate.feature.composesampler.extension.rootView
-import me.reim.androidtemplate.feature.composesampler.ui.theme.AndroidTemplateTheme
 
-class ComposeMainFragment : Fragment() {
+class CounterFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return rootView {
-            ComposeMainFragmentView(onClickOpenCounter = {
-                val action = ComposeMainFragmentDirections.actionOpenComposeCounterFragment()
-                findNavController().navigate(action)
-            })
+            CounterFragmentView()
         }
     }
 }
 
 @Composable
-private fun ComposeMainFragmentView(onClickOpenCounter: () -> Unit = {}) {
+private fun CounterFragmentView() {
+    var count by remember { mutableStateOf(0) }
+    CounterFragmentViewPresenter(
+        count = count,
+        onClickPlus = {
+            count += 1
+        }, onClickMinus = {
+            count -= 1
+        }
+    )
+}
+
+@Composable
+private fun CounterFragmentViewPresenter(count: Int, onClickPlus: () -> Unit, onClickMinus: () -> Unit) {
     Surface {
         Column(
             modifier = Modifier
                 .padding(16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Button(
+            Text(
+                text = count.toString(),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.body1,
+                fontSize = 32.sp,
                 modifier = Modifier
-                    .fillMaxWidth(),
-                onClick = onClickOpenCounter
+                    .fillMaxWidth()
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 32.dp),
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
-                Text(
-                    text = "基本のサンプル（カウンターアプリ）",
-                    style = MaterialTheme.typography.button
-                )
+                Button(
+                    onClick = onClickMinus,
+                ) {
+                    Text(
+                        text = "-",
+                        style = MaterialTheme.typography.button,
+                        fontSize = 32.sp,
+                    )
+                }
+                Button(
+                    onClick = onClickPlus,
+                ) {
+                    Text(
+                        text = "+",
+                        style = MaterialTheme.typography.button,
+                        fontSize = 32.sp,
+                    )
+                }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    AndroidTemplateTheme {
-        ComposeMainFragmentView()
     }
 }

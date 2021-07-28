@@ -61,5 +61,15 @@
         android:name="me.reim.androidtemplate.feature.composesampler.ui.ComposeMainFragment"
         android:label="test"
         android:title="test">
+        <action
+            android:id="@+id/action_open_composeCounterFragment"
+            app:destination="@+id/compose_counter_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/compose_counter_fragment"
+        android:name="me.reim.androidtemplate.feature.composesampler.ui.CounterFragment"
+        android:label="test"
+        android:title="test">
     </fragment>
 </navigation>
