@@ -35,6 +35,7 @@ dependencies {
 
     implementation project(":feature:core")
     implementation project(":feature:pagingsampler")
+    implementation project(":feature:composesampler")
 }
 
 apply from: '../gradle/configAndroid.gradle'

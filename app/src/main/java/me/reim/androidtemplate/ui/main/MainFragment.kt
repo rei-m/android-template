@@ -46,5 +46,9 @@ class MainFragment : Fragment() {
             val action = MainFragmentDirections.actionMainToQiitaArticles()
             findNavController().navigate(action)
         }
+        binding.openComposeSamplerButton.setOnClickListener {
+            val action = MainFragmentDirections.actionMainToComposeMain()
+            findNavController().navigate(action)
+        }
     }
 }

@@ -3,4 +3,5 @@
 
     <!-- Feature Name -->
     <string name="feature_paging_sampler">Paging3のサンプル</string>
+    <string name="feature_compose_sampler">Composeのサンプル</string>
 </resources>
