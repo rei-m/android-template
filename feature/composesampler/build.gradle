@@ -43,7 +43,6 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerVersion = kotlin_version
         kotlinCompilerExtensionVersion = "1.0.0-rc02"
     }
 }

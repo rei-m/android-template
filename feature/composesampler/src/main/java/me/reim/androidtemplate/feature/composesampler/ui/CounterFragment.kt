@@ -17,6 +17,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -25,29 +26,65 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import me.reim.androidtemplate.feature.composesampler.extension.rootView
 
 class CounterFragment : Fragment() {
+
+    private val liveDataViewModel: LiveDataViewModel by activityViewModels()
+    private val flowViewModel: FlowViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return rootView {
-            CounterFragmentView()
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                RememberStateView()
+                RememberSavableStateView()
+                LiveDataStateView(viewModel = liveDataViewModel)
+                FlowStateView(viewModel = flowViewModel)
+            }
         }
     }
 }
 
+class LiveDataViewModel : ViewModel() {
+    private val _count = MutableLiveData(0)
+    val count: LiveData<Int> = _count
+
+    fun onChangeCount(newCount: Int) {
+        _count.value = newCount
+    }
+}
+
+class FlowViewModel : ViewModel() {
+    private val _count = MutableStateFlow<Int>(0)
+    val count: StateFlow<Int> = _count
+
+    fun onChangeCount(newCount: Int) {
+        _count.value = newCount
+    }
+}
+
 @Composable
-private fun CounterFragmentView() {
+private fun RememberStateView() {
     var count by remember { mutableStateOf(0) }
     CounterFragmentViewPresenter(
+        title = "remember",
         count = count,
         onClickPlus = {
             count += 1
@@ -58,13 +95,61 @@ private fun CounterFragmentView() {
 }
 
 @Composable
-private fun CounterFragmentViewPresenter(count: Int, onClickPlus: () -> Unit, onClickMinus: () -> Unit) {
+private fun RememberSavableStateView() {
+    var count by rememberSaveable { mutableStateOf(0) }
+    CounterFragmentViewPresenter(
+        title = "rememberSaveable",
+        count = count,
+        onClickPlus = {
+            count += 1
+        }, onClickMinus = {
+            count -= 1
+        }
+    )
+}
+
+@Composable
+private fun LiveDataStateView(viewModel: LiveDataViewModel) {
+    val count by viewModel.count.observeAsState(0)
+    CounterFragmentViewPresenter(
+        title = "ViewModel + LiveData",
+        count = count,
+        onClickPlus = {
+            viewModel.onChangeCount(count + 1)
+        }, onClickMinus = {
+            viewModel.onChangeCount(count - 1)
+        }
+    )
+}
+
+@Composable
+private fun FlowStateView(viewModel: FlowViewModel) {
+    val count by viewModel.count.collectAsState(0)
+    CounterFragmentViewPresenter(
+        title = "ViewModel + Flow",
+        count = count,
+        onClickPlus = {
+            viewModel.onChangeCount(count + 1)
+        }, onClickMinus = {
+            viewModel.onChangeCount(count - 1)
+        }
+    )
+}
+
+@Composable
+private fun CounterFragmentViewPresenter(title: String, count: Int, onClickPlus: () -> Unit, onClickMinus: () -> Unit) {
     Surface {
         Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.padding(16.dp)
         ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.h3,
+                fontSize = 24.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            )
             Text(
                 text = count.toString(),
                 textAlign = TextAlign.Center,
