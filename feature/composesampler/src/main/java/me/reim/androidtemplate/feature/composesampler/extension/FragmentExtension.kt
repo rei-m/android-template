@@ -16,6 +16,8 @@ package me.reim.androidtemplate.feature.composesampler.extension
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import me.reim.androidtemplate.feature.composesampler.ui.ComposeMainFragmentDirections
 import me.reim.androidtemplate.feature.composesampler.ui.theme.AndroidTemplateTheme
 
 fun Fragment.rootView(content: @Composable () -> Unit): ComposeView {
@@ -24,4 +26,14 @@ fun Fragment.rootView(content: @Composable () -> Unit): ComposeView {
             AndroidTemplateTheme(content = content)
         }
     }
+}
+
+fun Fragment.navigateToCounter() {
+    val action = ComposeMainFragmentDirections.actionOpenComposeCounterFragment()
+    findNavController().navigate(action)
+}
+
+fun Fragment.navigateToSideEffect() {
+    val action = ComposeMainFragmentDirections.actionOpenComposeSideEffectFragment()
+    findNavController().navigate(action)
 }

@@ -64,6 +64,10 @@
         <action
             android:id="@+id/action_open_composeCounterFragment"
             app:destination="@+id/compose_counter_fragment" />
+
+        <action
+            android:id="@+id/action_open_composeSideEffectFragment"
+            app:destination="@+id/compose_side_effect_fragment" />
     </fragment>
 
     <fragment
@@ -71,5 +75,12 @@
         android:name="me.reim.androidtemplate.feature.composesampler.ui.CounterFragment"
         android:label="カウンターアプリ"
         android:title="カウンターアプリ">
+    </fragment>
+
+    <fragment
+        android:id="@+id/compose_side_effect_fragment"
+        android:name="me.reim.androidtemplate.feature.composesampler.ui.SiteEffectFragment"
+        android:label="副作用の確認"
+        android:title="副作用の確認">
     </fragment>
 </navigation>
