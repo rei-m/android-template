@@ -139,7 +139,6 @@ private fun TextForm(initialValue: String = "", label: String = "", onSubmit: (v
     }
 }
 
-
 @Composable
 fun BackHandler(backDispatcher: OnBackPressedDispatcher, onBack: () -> Unit) {
     // Safely update the current `onBack` lambda when a new one is provided
