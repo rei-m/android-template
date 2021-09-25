@@ -59,7 +59,10 @@ private fun SiteEffectFragmentView(backDispatcher: OnBackPressedDispatcher) {
         },
         content = { innerPadding ->
             Column(modifier = Modifier.padding(innerPadding)) {
-                Text("空文字でボタンを押すとsnackbarを表示するサンプル")
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = "ボタンを押すとsnackbarを表示するサンプル"
+                )
                 Divider(modifier = Modifier.padding(8.dp))
                 LaunchedEffectView(scaffoldState = scaffoldState)
                 Divider(modifier = Modifier.padding(8.dp))
@@ -78,10 +81,10 @@ private fun SiteEffectFragmentView(backDispatcher: OnBackPressedDispatcher) {
 private fun LaunchedEffectView(scaffoldState: ScaffoldState) {
     var submitted by remember { mutableStateOf("") }
     var errorCount by remember { mutableStateOf(0) }
-    if (0 < errorCount) {
-        LaunchedEffect(key1 = errorCount) {
+    LaunchedEffect(key1 = errorCount) {
+        if (0 < errorCount) {
             scaffoldState.snackbarHostState.showSnackbar(
-                message = "これはcompose時に呼ばれている"
+                message = "error=${errorCount}. これはcompose時にsuspend関数を呼んでいる。再composeされると自動で前回のjobはキャンセルされる。"
             )
         }
     }
@@ -102,12 +105,12 @@ private fun LaunchedEffectView(scaffoldState: ScaffoldState) {
 private fun RememberCoroutineScopeView(scaffoldState: ScaffoldState) {
     val scope = rememberCoroutineScope()
     TextForm(
-        label = "LaunchedEffectの確認",
+        label = "rememberCoroutineScopeの確認",
         onSubmit = {
             scope.launch {
                 if (it.isEmpty()) {
                     scaffoldState.snackbarHostState
-                        .showSnackbar("これはsubmitのイベントハンドラ内で呼ばれている")
+                        .showSnackbar("これはsubmitのイベントハンドラ内で呼ばれている。Compositionから退場しない限り、rememberCoroutineScopeで作られたscopeは生き続けるので、ボタンを押した回数だけsnackbarが表示される")
                 }
             }
         })

@@ -78,7 +78,7 @@ private fun ComposeMainFragmentView(onClickOpenCounter: () -> Unit = {}, onClick
                 onClick = onClickOpenSideEffect
             ) {
                 Text(
-                    text = "副作用の確認",
+                    text = "副作用の確認 1",
                     style = MaterialTheme.typography.button
                 )
             }
