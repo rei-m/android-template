@@ -31,7 +31,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import me.reim.androidtemplate.feature.composesampler.extension.navigateToCounter
+import me.reim.androidtemplate.feature.composesampler.extension.navigateToSideEffect
 import me.reim.androidtemplate.feature.composesampler.extension.rootView
 import me.reim.androidtemplate.feature.composesampler.ui.theme.AndroidTemplateTheme
 
@@ -43,15 +44,16 @@ class ComposeMainFragment : Fragment() {
     ): View {
         return rootView {
             ComposeMainFragmentView(onClickOpenCounter = {
-                val action = ComposeMainFragmentDirections.actionOpenComposeCounterFragment()
-                findNavController().navigate(action)
+                navigateToCounter()
+            }, onClickOpenSideEffect = {
+                navigateToSideEffect()
             })
         }
     }
 }
 
 @Composable
-private fun ComposeMainFragmentView(onClickOpenCounter: () -> Unit = {}) {
+private fun ComposeMainFragmentView(onClickOpenCounter: () -> Unit = {}, onClickOpenSideEffect: () -> Unit = {}) {
     Surface {
         Column(
             modifier = Modifier
@@ -65,6 +67,18 @@ private fun ComposeMainFragmentView(onClickOpenCounter: () -> Unit = {}) {
             ) {
                 Text(
                     text = "基本のサンプル（カウンターアプリ）",
+                    style = MaterialTheme.typography.button
+                )
+            }
+
+            Button(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .fillMaxWidth(),
+                onClick = onClickOpenSideEffect
+            ) {
+                Text(
+                    text = "副作用の確認 1",
                     style = MaterialTheme.typography.button
                 )
             }
